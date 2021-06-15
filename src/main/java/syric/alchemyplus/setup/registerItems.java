@@ -13,7 +13,7 @@ public class registerItems {
 //            return new ItemStack(EXAMPLE_ITEM);
 //        }
 //    };
-//    public static final RegistryObject<Item> EXAMPLE_ITEM = registry.ITEMS.register("example_item", () -> new Item(new Item.Properties().tab(ItemGroup.TAB_MATERIALS)));
+    public static final RegistryObject<Item> ALCHEMICAL_FLASK = registry.ITEMS.register("alchemical_flask", () -> new Item(new Item.Properties().tab(ItemGroup.TAB_MATERIALS)));
 
     static void register() {}
 
