@@ -1,13 +1,13 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "particle": "block/alchemical_cauldron_side",
-        "top": "block/alchemical_cauldron_top",
-        "bottom": "block/alchemical_cauldron_bottom",
-        "side": "block/alchemical_cauldron_side",
-        "inside": "block/alchemical_cauldron_inner",
+        "particle": "alchemyplus:block/alchemical_cauldron_side",
+        "top": "alchemyplus:block/alchemical_cauldron_top",
+        "bottom": "alchemyplus:block/alchemical_cauldron_bottom",
+        "side": "alchemyplus:block/alchemical_cauldron_side",
+        "inside": "alchemyplus:block/alchemical_cauldron_inner",
         "innerside": "alchemyplus:block/alchemical_cauldron_innerside",
-        "water": "block/water_still"
+        "water": "alchemyplus:block/water_still"
     },
     "elements": [
         {

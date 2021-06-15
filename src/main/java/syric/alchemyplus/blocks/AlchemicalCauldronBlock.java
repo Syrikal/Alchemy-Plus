@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.DoorHingeSide;
 import net.minecraft.state.properties.DoubleBlockHalf;
@@ -33,7 +34,7 @@ import syric.alchemyplus.setup.registry;
 import javax.annotation.Nullable;
 
 public class AlchemicalCauldronBlock extends Block {
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 3);
+    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 3);
     private static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape SHAPE = VoxelShapes.join(VoxelShapes.block(), VoxelShapes.or(box(0.0D, 0.0D, 4.0D, 16.0D, 3.0D, 12.0D), box(4.0D, 0.0D, 0.0D, 12.0D, 3.0D, 16.0D), box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D), INSIDE), IBooleanFunction.ONLY_FIRST);
 
@@ -43,15 +44,15 @@ public class AlchemicalCauldronBlock extends Block {
 ////        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0)));
 //    }
 
-//    @Nullable
-//    @Override
-//    public BlockState getStateForPlacement(BlockItemUseContext context) {
-//        return this.stateDefinition.any().setValue(LEVEL, 0);
-//    }
 
     public AlchemicalCauldronBlock(AbstractBlock.Properties properties) {
         super(properties);
-//        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0)));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(LEVEL);
     }
 
     public VoxelShape getShape(BlockState blockstate, IBlockReader reader, BlockPos pos, ISelectionContext context) {
