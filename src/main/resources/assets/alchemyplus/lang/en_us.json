@@ -1,6 +1,11 @@
 {
     "block.alchemyplus.alchemical_cauldron": "Alchemical Cauldron",
     "item.alchemyplus.alchemical_flask": "Alchemical Flask",
-    "item.alchemyplus.alchemical_flask_full": "Full Alchemical Flask"
+    "item.alchemyplus.alchemical_flask_full": "Full Alchemical Flask",
 
+
+    "block.alchemyplus.crash_pad": "Crash Pad",
+    "block.alchemyplus.rigid_slime": "Rigid Slime",
+    "block.alchemyplus.launch_pad": "Launch Pad",
+    "block.alchemyplus.bounce_slime": "Bounce Slime"
 }

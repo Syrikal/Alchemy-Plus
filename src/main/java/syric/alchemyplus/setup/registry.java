@@ -20,7 +20,6 @@ public class registry {
 
         registerItems.register();
         registerBlocks.register();
-
     }
 
 }
