@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "alchemyplus:items/alchemical_flask"
+    "layer0": "alchemyplus:item/alchemical_flask"
   }
 }

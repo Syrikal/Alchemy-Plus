@@ -14,6 +14,8 @@ public class registerItems {
 //        }
 //    };
     public static final RegistryObject<Item> ALCHEMICAL_FLASK = registry.ITEMS.register("alchemical_flask", () -> new Item(new Item.Properties().tab(ItemGroup.TAB_MATERIALS)));
+    public static final RegistryObject<Item> ALCHEMICAL_FLASK_FULL = registry.ITEMS.register("alchemical_flask_full", () -> new Item(new Item.Properties().tab(ItemGroup.TAB_MATERIALS)));
+
 
     static void register() {}
 

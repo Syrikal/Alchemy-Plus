@@ -1,4 +1,6 @@
 {
     "block.alchemyplus.alchemical_cauldron": "Alchemical Cauldron",
-    "item.alchemyplus.alchemical_flask": "Alchemical Flask"
+    "item.alchemyplus.alchemical_flask": "Alchemical Flask",
+    "item.alchemyplus.alchemical_flask_full": "Full Alchemical Flask"
+
 }
