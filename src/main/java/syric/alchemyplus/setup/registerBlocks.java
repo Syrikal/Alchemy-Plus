@@ -10,7 +10,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import syric.alchemyplus.AlchemyPlus;
 import syric.alchemyplus.blocks.AlchemicalCauldronBlock;
 import syric.alchemyplus.blocks.slime.BounceSlimeBlock;
@@ -22,12 +26,9 @@ import java.util.function.Supplier;
 
 public class registerBlocks {
 
-//    public static ItemGroup TAB_BLOCKS = new ItemGroup(AlchemyPlus.MODID) {
-//        @Override
-//        public ItemStack makeIcon() {
-//            return new ItemStack(EXAMPLE_ITEM);
-//        }
-//    };
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, AlchemyPlus.MODID);
+
+
 
     //Cauldron
     public static final RegistryObject<Block> ALCHEMICAL_CAULDRON = register("alchemical_cauldron", () -> new AlchemicalCauldronBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F).noOcclusion()));
@@ -40,15 +41,17 @@ public class registerBlocks {
 
 
 
-    static void register() {}
+    static void register(IEventBus bus) {
+        BLOCKS.register(bus);
+    }
 
     private static <T extends Block> RegistryObject<T> registerNoItem(String name, Supplier<T> block) {
-        return registry.BLOCKS.register(name, block);
+        return BLOCKS.register(name, block);
     }
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
         RegistryObject<T> ret = registerNoItem(name, block);
-        registry.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(ItemGroup.TAB_BREWING)));
+        registerItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(ItemGroup.TAB_BREWING)));
         return ret;
     }
 

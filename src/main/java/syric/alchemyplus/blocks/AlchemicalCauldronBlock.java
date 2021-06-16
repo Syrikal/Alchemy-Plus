@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraft.block.CauldronBlock;
 import syric.alchemyplus.AlchemyPlus;
 import syric.alchemyplus.alchemy.Substance;
+//import syric.alchemyplus.setup.DebugPrint;
 import syric.alchemyplus.setup.registerBlocks;
 import syric.alchemyplus.setup.registerItems;
 import syric.alchemyplus.setup.registry;
@@ -40,12 +41,13 @@ public class AlchemicalCauldronBlock extends Block {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 3);
     private static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape SHAPE = VoxelShapes.join(VoxelShapes.block(), VoxelShapes.or(box(0.0D, 0.0D, 4.0D, 16.0D, 3.0D, 12.0D), box(4.0D, 0.0D, 0.0D, 12.0D, 3.0D, 16.0D), box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D), INSIDE), IBooleanFunction.ONLY_FIRST);
-    public ArrayList<Substance> substances;
+    public boolean slimed;
 
 
     public AlchemicalCauldronBlock(AbstractBlock.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0)));
+        this.slimed = false;
     }
 
     @Override
@@ -79,18 +81,10 @@ public class AlchemicalCauldronBlock extends Block {
     public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         ItemStack itemstack = player.getItemInHand(hand);
 
-        String s = "Block Activated With " + itemstack.toString();
-        ITextComponent text = new StringTextComponent(s);
-        if (!world.isClientSide) {
-            player.sendMessage(text, player.getUUID());
-        }
+//        DebugPrint.print("cauldron activated with: " + itemstack.toString() + ", client world: " + world.isClientSide, player, world);
 
         if (itemstack.isEmpty()) {
-            s = "Item Stack Empty";
-            text = new StringTextComponent(s);
-            if (!world.isClientSide) {
-                player.sendMessage(text, player.getUUID());
-            }
+//            DebugPrint.print("hand empty", player, world);
             return ActionResultType.PASS;
 
         } else {
@@ -98,48 +92,60 @@ public class AlchemicalCauldronBlock extends Block {
             Item item = itemstack.getItem();
 
             if (item == Items.WATER_BUCKET) {
+//                DebugPrint.print("water bucket recognized", player, world);
                 if (i < 3 && !world.isClientSide) {
                         if (!player.abilities.instabuild) {
                             player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                         }
-
                         player.awardStat(Stats.FILL_CAULDRON);
                         this.setWaterLevel(world, pos, state, 3);
+//                        DebugPrint.print("cauldron filled", player, world);
                         world.playSound((PlayerEntity) null, pos, SoundEvents.BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                        return ActionResultType.sidedSuccess(false);
                 }
+                return ActionResultType.sidedSuccess(world.isClientSide);
 
             } else if (item == registerItems.ALCHEMICAL_FLASK.get()) {
+//                DebugPrint.print("alchemical flask recognized", player, world);
                 if (i > 0 && !world.isClientSide) {
-                    player.setItemInHand(hand, new ItemStack(registerItems.ALCHEMICAL_FLASK_FULL.get()));
+                    if (slimed) {
+                        if (itemstack.isEmpty()) {
+                            player.setItemInHand(hand, new ItemStack(Items.SLIME_BLOCK));
+                        } else if (!player.inventory.add(new ItemStack(Items.SLIME_BLOCK))) {
+                            player.drop(new ItemStack(Items.SLIME_BLOCK), false);
+                        }
+//                        DebugPrint.print("slime given", player, world);
+                        slimed = false;
+                    } else {
+                        if (!player.abilities.instabuild) {
+                            itemstack.shrink(1);
+                        }
+                        if (itemstack.isEmpty()) {
+                            player.setItemInHand(hand, new ItemStack(registerItems.ALCHEMICAL_FLASK_FULL.get()));
+                        } else if (!player.inventory.add(new ItemStack(registerItems.ALCHEMICAL_FLASK_FULL.get()))) {
+                            player.drop(new ItemStack(registerItems.ALCHEMICAL_FLASK_FULL.get()), false);
+                        }
+                    }
                     this.setWaterLevel(world, pos, state, i - 1);
                     world.playSound((PlayerEntity) null, pos, SoundEvents.BOTTLE_FILL, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    if (!this.substances.isEmpty()) {
-                        player.setItemInHand(hand, new ItemStack(Items.SLIME_BLOCK));
-                    }
-                    return ActionResultType.sidedSuccess(false);
+//                    DebugPrint.print("flask filled", player, world);
                 }
+                return ActionResultType.sidedSuccess(world.isClientSide);
+
             } else if (item == Items.SLIME_BALL) {
+//                DebugPrint.print("slime ball recognized", player, world);
                 if (i > 0 && !world.isClientSide) {
-                    Substance bounceslime = new Substance(new Item[] {Items.SLIME_BALL}, new Item[] {}, new Substance[] {},new Item[] {}, false);
-                    this.substances.add(bounceslime);
-                    world.playSound((PlayerEntity) null, pos, SoundEvents.GENERIC_SPLASH, SoundCategory.BLOCKS,1.0F,1.0F);
+                    slimed = true;
+                    itemstack.shrink(1);
+//                    DebugPrint.print("slime added to cauldron", player, world);
+                    world.playSound((PlayerEntity) null, pos, SoundEvents.GENERIC_SPLASH, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
+                return ActionResultType.sidedSuccess(world.isClientSide);
+
             } else {
-                s = "Item Not Recognized";
-                text = new StringTextComponent(s);
-                if (!world.isClientSide) {
-                    player.sendMessage(text, player.getUUID());
-                }
+//                DebugPrint.print("item not recognized, passing", player, world);
                 return ActionResultType.PASS;
             }
         }
-        s = "How the fuck";
-        text = new StringTextComponent(s);
-        if (!world.isClientSide) {
-            player.sendMessage(text, player.getUUID());
-        }
-        return ActionResultType.PASS;
     }
 
     public void setWaterLevel(World world, BlockPos pos, BlockState state, int level) {

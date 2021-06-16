@@ -10,16 +10,12 @@ import syric.alchemyplus.AlchemyPlus;
 
 public class registry {
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, AlchemyPlus.MODID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, AlchemyPlus.MODID);
 
     public static void register() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
 
-        registerItems.register();
-        registerBlocks.register();
+        registerItems.register(modEventBus);
+        registerBlocks.register(modEventBus);
     }
 
 }
