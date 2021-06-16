@@ -26,6 +26,8 @@ public class CrashPadBlock extends BreakableBlock {
         } else {
             entity.causeFallDamage(num, 0.0F);
         }
-        world.destroyBlock(pos, true);
+        if (!world.isClientSide) {
+            world.destroyBlock(pos, true);
+        }
     }
 }

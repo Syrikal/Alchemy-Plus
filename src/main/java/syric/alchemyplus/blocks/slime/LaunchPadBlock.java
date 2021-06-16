@@ -21,8 +21,9 @@ public class LaunchPadBlock extends BreakableBlock {
             entity.setDeltaMovement(vector3d.x, 2.0D, vector3d.z);
         }
         super.stepOn(world, pos, entity);
-        world.destroyBlock(pos, true);
-    }
+        if (!world.isClientSide) {
+            world.destroyBlock(pos, true);
+        }    }
 
 }
 

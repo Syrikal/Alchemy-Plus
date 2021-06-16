@@ -28,21 +28,19 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.block.CauldronBlock;
 import syric.alchemyplus.AlchemyPlus;
+import syric.alchemyplus.alchemy.Substance;
+import syric.alchemyplus.setup.registerBlocks;
 import syric.alchemyplus.setup.registerItems;
 import syric.alchemyplus.setup.registry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class AlchemicalCauldronBlock extends Block {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 3);
     private static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape SHAPE = VoxelShapes.join(VoxelShapes.block(), VoxelShapes.or(box(0.0D, 0.0D, 4.0D, 16.0D, 3.0D, 12.0D), box(4.0D, 0.0D, 0.0D, 12.0D, 3.0D, 16.0D), box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D), INSIDE), IBooleanFunction.ONLY_FIRST);
-
-//    public AlchemicalCauldronBlock() {
-//        super(Properties.of(Material.METAL).sound(SoundType.METAL).harvestLevel(3).strength(2F,2F));
-////        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
-////        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0)));
-//    }
+    public ArrayList<Substance> substances;
 
 
     public AlchemicalCauldronBlock(AbstractBlock.Properties properties) {
@@ -78,45 +76,75 @@ public class AlchemicalCauldronBlock extends Block {
 ////        }
 //    }
 
-//    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-//        ItemStack itemstack = player.getItemInHand(hand);
-//
-//        if (itemstack.isEmpty()) {
-//            return ActionResultType.PASS;
-//
-//        } else {
-//            int i = state.getValue(LEVEL);
-//            Item item = itemstack.getItem();
-//
-//            if (item == Items.WATER_BUCKET) {
-//                if (i < 3 && !world.isClientSide) {
-//                        if (!player.abilities.instabuild) {
-//                            player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-//                        }
-//
-//                        player.awardStat(Stats.FILL_CAULDRON);
-//                        this.setWaterLevel(world, pos, state, 3);
-//                        world.playSound((PlayerEntity) null, pos, SoundEvents.BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-//                        return ActionResultType.sidedSuccess(false);
-//                }
-//
-//            } else if (item == registerItems.ALCHEMICAL_FLASK.get()) {
-//                    if (i > 0 && !world.isClientSide) {
-//                        player.setItemInHand(hand, new ItemStack(registerItems.ALCHEMICAL_FLASK_FULL.get()));
-//                        this.setWaterLevel(world, pos, state, i-1);
-//                        world.playSound((PlayerEntity) null, pos, SoundEvents.BOTTLE_FILL, SoundCategory.PLAYERS, 1.0F, 1.0F);
-//                        return ActionResultType.sidedSuccess(false);
-//                    }
-//            } else {
-//                return ActionResultType.PASS;
-//            }
-//        }
-//        return ActionResultType.PASS;
-//    }
-//
-//    public void setWaterLevel(World world, BlockPos pos, BlockState state, int level) {
-//        world.setBlock(pos, state.setValue(LEVEL, Integer.valueOf(MathHelper.clamp(level, 0, 3))), 2);
-//    }
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        ItemStack itemstack = player.getItemInHand(hand);
+
+        String s = "Block Activated With " + itemstack.toString();
+        ITextComponent text = new StringTextComponent(s);
+        if (!world.isClientSide) {
+            player.sendMessage(text, player.getUUID());
+        }
+
+        if (itemstack.isEmpty()) {
+            s = "Item Stack Empty";
+            text = new StringTextComponent(s);
+            if (!world.isClientSide) {
+                player.sendMessage(text, player.getUUID());
+            }
+            return ActionResultType.PASS;
+
+        } else {
+            int i = state.getValue(LEVEL);
+            Item item = itemstack.getItem();
+
+            if (item == Items.WATER_BUCKET) {
+                if (i < 3 && !world.isClientSide) {
+                        if (!player.abilities.instabuild) {
+                            player.setItemInHand(hand, new ItemStack(Items.BUCKET));
+                        }
+
+                        player.awardStat(Stats.FILL_CAULDRON);
+                        this.setWaterLevel(world, pos, state, 3);
+                        world.playSound((PlayerEntity) null, pos, SoundEvents.BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        return ActionResultType.sidedSuccess(false);
+                }
+
+            } else if (item == registerItems.ALCHEMICAL_FLASK.get()) {
+                if (i > 0 && !world.isClientSide) {
+                    player.setItemInHand(hand, new ItemStack(registerItems.ALCHEMICAL_FLASK_FULL.get()));
+                    this.setWaterLevel(world, pos, state, i - 1);
+                    world.playSound((PlayerEntity) null, pos, SoundEvents.BOTTLE_FILL, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    if (!this.substances.isEmpty()) {
+                        player.setItemInHand(hand, new ItemStack(Items.SLIME_BLOCK));
+                    }
+                    return ActionResultType.sidedSuccess(false);
+                }
+            } else if (item == Items.SLIME_BALL) {
+                if (i > 0 && !world.isClientSide) {
+                    Substance bounceslime = new Substance(new Item[] {Items.SLIME_BALL}, new Item[] {}, new Substance[] {},new Item[] {}, false);
+                    this.substances.add(bounceslime);
+                    world.playSound((PlayerEntity) null, pos, SoundEvents.GENERIC_SPLASH, SoundCategory.BLOCKS,1.0F,1.0F);
+                }
+            } else {
+                s = "Item Not Recognized";
+                text = new StringTextComponent(s);
+                if (!world.isClientSide) {
+                    player.sendMessage(text, player.getUUID());
+                }
+                return ActionResultType.PASS;
+            }
+        }
+        s = "How the fuck";
+        text = new StringTextComponent(s);
+        if (!world.isClientSide) {
+            player.sendMessage(text, player.getUUID());
+        }
+        return ActionResultType.PASS;
+    }
+
+    public void setWaterLevel(World world, BlockPos pos, BlockState state, int level) {
+        world.setBlock(pos, state.setValue(LEVEL, Integer.valueOf(MathHelper.clamp(level, 0, 3))), 2);
+    }
 
 
     }
