@@ -1,5 +1,6 @@
 package syric.alchemyplus.blocks;
 
+import io.netty.handler.codec.memcache.binary.DefaultBinaryMemcacheRequest;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -28,11 +29,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.block.CauldronBlock;
 import syric.alchemyplus.AlchemyPlus;
+import syric.alchemyplus.alchemy.IngredientsDict;
 import syric.alchemyplus.alchemy.Substance;
 //import syric.alchemyplus.setup.DebugPrint;
+import syric.alchemyplus.setup.DebugPrint;
 import syric.alchemyplus.setup.registerBlocks;
 import syric.alchemyplus.setup.registerItems;
 import syric.alchemyplus.setup.registry;
+import syric.alchemyplus.alchemy.SubstanceList;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -82,6 +86,8 @@ public class AlchemicalCauldronBlock extends Block {
         ItemStack itemstack = player.getItemInHand(hand);
 
 //        DebugPrint.print("cauldron activated with: " + itemstack.toString() + ", client world: " + world.isClientSide, player, world);
+        DebugPrint.print(String.valueOf(slimed), player, world);
+
 
         if (itemstack.isEmpty()) {
 //            DebugPrint.print("hand empty", player, world);
@@ -100,6 +106,8 @@ public class AlchemicalCauldronBlock extends Block {
                         player.awardStat(Stats.FILL_CAULDRON);
                         this.setWaterLevel(world, pos, state, 3);
 //                        DebugPrint.print("cauldron filled", player, world);
+                        slimed = false;
+                        DebugPrint.print("unslimed", player, world);
                         world.playSound((PlayerEntity) null, pos, SoundEvents.BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
                 return ActionResultType.sidedSuccess(world.isClientSide);
@@ -108,14 +116,21 @@ public class AlchemicalCauldronBlock extends Block {
 //                DebugPrint.print("alchemical flask recognized", player, world);
                 if (i > 0 && !world.isClientSide) {
                     if (slimed) {
+                        DebugPrint.print("slimed!", player, world);
                         if (itemstack.isEmpty()) {
                             player.setItemInHand(hand, new ItemStack(Items.SLIME_BLOCK));
                         } else if (!player.inventory.add(new ItemStack(Items.SLIME_BLOCK))) {
                             player.drop(new ItemStack(Items.SLIME_BLOCK), false);
                         }
-//                        DebugPrint.print("slime given", player, world);
+                        this.setWaterLevel(world, pos, state, 0);
+                        DebugPrint.print(SubstanceList.list.get(0).name, player, world);
+                        DebugPrint.print(IngredientsDict.dict.get(Items.SLIME_BALL).id, player, world);
+
                         slimed = false;
+                        DebugPrint.print("unslimed", player, world);
+
                     } else {
+                        DebugPrint.print("not slimed", player, world);
                         if (!player.abilities.instabuild) {
                             itemstack.shrink(1);
                         }
