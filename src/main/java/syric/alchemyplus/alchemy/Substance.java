@@ -2,6 +2,7 @@ package syric.alchemyplus.alchemy;
 
 import net.minecraft.item.Item;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,31 +10,45 @@ import java.util.Set;
 public class Substance {
 
     public String name;
-    public Set<Item> recipe;
-    public Item[] additives;
-    public Substance[] results;
-    public Set<Item> reactants;
+    public Set<Ingredient> reactants;
     public Boolean fullCauldron;
+    public Item itemEquivalent;
 
-
-    public Substance(String nameIn, Set<Item> recipe, Item[] additives, Substance[] results, Set<Item> reactants, Boolean fullCauldron) {
+//Constructors
+    public Substance(String nameIn, Set<Ingredient> reactants, Boolean fullCauldron, Item itemEquivalent) {
         this.name = nameIn;
-        this.recipe = recipe;
-        this.additives = additives;
-        this.results = results;
         this.reactants = reactants;
         this.fullCauldron = fullCauldron;
+        this.itemEquivalent = itemEquivalent;
     }
 
-    public Substance(String nameIn, Item[] recipeIn, Item[] additives, Substance[] results, Item[] reactants, Boolean fullCauldron) {
+    public Substance(String nameIn, Ingredient[] reactants, Boolean fullCauldron, Item itemEquivalent) {
         this.name = nameIn;
-        this.recipe = new HashSet<Item>() {};
-        this.recipe.addAll(Arrays.asList(recipeIn));
-        this.additives = additives;
-        this.results = results;
-        this.reactants = new HashSet<Item>() {};
+        this.reactants = new HashSet<Ingredient>() {};
         this.reactants.addAll(Arrays.asList(reactants));
         this.fullCauldron = fullCauldron;
+        this.itemEquivalent = itemEquivalent;
     }
 
+
+
+    //Getters and Setters
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Set<Ingredient> getReactants() {
+        return reactants;
+    }
+    public void setReactants(Set<Ingredient> reactants) {
+        this.reactants = reactants;
+    }
+    public Boolean getFullCauldron() {
+        return fullCauldron;
+    }
+    public void setFullCauldron(Boolean fullCauldron) {
+        this.fullCauldron = fullCauldron;
+    }
 }

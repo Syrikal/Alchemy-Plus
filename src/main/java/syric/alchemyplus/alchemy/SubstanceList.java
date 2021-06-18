@@ -4,18 +4,29 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import syric.alchemyplus.alchemy.Substance;
+import syric.alchemyplus.setup.registerBlocks;
+import syric.alchemyplus.setup.registerItems;
 
 public class SubstanceList {
     public static ArrayList<Substance> list = new ArrayList<Substance>();
 
+    public static Substance water = new Substance("water", new Ingredient[]{}, false, null);
+    public static Substance crash_pad = new Substance("crash_pad", new Ingredient[]{}, true, registerBlocks.CRASH_PAD.get().asItem());
+
     public SubstanceList() {
-        add("crash_pad", new Item[]{Items.SLIME_BALL, Items.PHANTOM_MEMBRANE}, new Item[]{}, new Substance[]{}, new Item[]{}, true);
+        initialize();
     }
 
-    private static void add(String nameIn, Item[] recipeIn, Item[] additives, Substance[] results, Item[] reactants, Boolean fullCauldron) {
-        Substance substance = new Substance(nameIn, recipeIn, additives, results, reactants, fullCauldron);
-        list.add(substance);
+    public static void initialize() {
+        list.add(water);
+        list.add(crash_pad);
+    }
+
+    //For getting ingredients
+    private static Ingredient get(Item item) {
+        return IngredientsDict.get(item);
     }
 
 }

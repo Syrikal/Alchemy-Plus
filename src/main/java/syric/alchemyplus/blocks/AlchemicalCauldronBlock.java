@@ -123,7 +123,7 @@ public class AlchemicalCauldronBlock extends Block {
                             player.drop(new ItemStack(Items.SLIME_BLOCK), false);
                         }
                         this.setWaterLevel(world, pos, state, 0);
-                        DebugPrint.print(SubstanceList.list.get(0).name, player, world);
+                        DebugPrint.print(SubstanceList.list.get(0).getName(), player, world);
                         DebugPrint.print(IngredientsDict.dict.get(Items.SLIME_BALL).id, player, world);
 
                         slimed = false;

@@ -15,9 +15,13 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import syric.alchemyplus.alchemy.RecipeList;
 import syric.alchemyplus.setup.registry;
 
 import java.util.stream.Collectors;
+
+import syric.alchemyplus.alchemy.SubstanceList;
+import syric.alchemyplus.alchemy.IngredientsDict;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(AlchemyPlus.MODID)
@@ -25,12 +29,14 @@ public class AlchemyPlus
 {
     public static final String MODID = "alchemyplus";
 
-
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
     public AlchemyPlus() {
         registry.register();
+        IngredientsDict.initialize();
+        SubstanceList.initialize();
+        RecipeList.initialize();
 
 
         // Register the setup method for modloading

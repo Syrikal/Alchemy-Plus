@@ -11,20 +11,20 @@ public class Ingredient {
     public String id;
     public int volume;
     public boolean special;
-    public Set<Item> reactants;
+    public Set<Ingredient> reactants;
 
-    public Ingredient(String id, int volume, boolean special, Set<Item> reactantsIn) {
+    public Ingredient(String id, int volume, boolean special, Set<Ingredient> reactantsIn) {
         this.id = id;
         this.volume = volume;
         this.special = special;
         this.reactants = reactantsIn;
     }
 
-    public Ingredient(String id, int volume, boolean special, Item[] reactantsIn) {
+    public Ingredient(String id, int volume, boolean special, Ingredient[] reactantsIn) {
         this.id = id;
         this.volume = volume;
         this.special = special;
-        this.reactants = new HashSet<Item>() {};
+        this.reactants = new HashSet<Ingredient>() {};
         this.reactants.addAll(Arrays.asList(reactantsIn));
     }
 
