@@ -59,8 +59,8 @@ public class CauldronFirstDraft {
 
         //Item is not ingredient.
         // Next, check if the item is a container, used to extract substances (bucket, bottle, flask, throwable shell)
-        else if ("item is a container") {
-            extract();
+        else if (false) { //if item is a container
+            //TODO extract();
         }
 
         //Item is not an ingredient or a container.
@@ -69,7 +69,7 @@ public class CauldronFirstDraft {
 
         }
 
-
+        return ActionResultType.SUCCESS;
     }
 
 

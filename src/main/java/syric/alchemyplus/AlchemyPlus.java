@@ -34,9 +34,9 @@ public class AlchemyPlus
 
     public AlchemyPlus() {
         registry.register();
-        IngredientsDict.initialize();
-        SubstanceList.initialize();
-        RecipeList.initialize();
+//        IngredientsDict.initialize();
+//        SubstanceList.initialize();
+//        RecipeList.initialize();
 
 
         // Register the setup method for modloading
