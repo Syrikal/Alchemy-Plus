@@ -14,7 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import syric.alchemyplus.AlchemyPlus;
 import syric.alchemyplus.blocks.cauldron.AlchemicalCauldronBlock;
-import syric.alchemyplus.blocks.AlchemicalCauldronBlockOld;
+import syric.alchemyplus.blocks.OldAlchemicalCauldronBlock;
 import syric.alchemyplus.blocks.slime.BounceSlimeBlock;
 import syric.alchemyplus.blocks.slime.CrashPadBlock;
 import syric.alchemyplus.blocks.slime.LaunchPadBlock;
@@ -29,7 +29,7 @@ public class registerBlocks {
 
 
     //Cauldron
-    public static final RegistryObject<Block> ALCHEMICAL_CAULDRON_OLD = register("alchemical_cauldron_old", () -> new AlchemicalCauldronBlockOld(AbstractBlock.Properties.of(Material.METAL, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F).noOcclusion()));
+    public static final RegistryObject<Block> ALCHEMICAL_CAULDRON_OLD = register("alchemical_cauldron_old", () -> new OldAlchemicalCauldronBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F).noOcclusion()));
     public static final RegistryObject<AlchemicalCauldronBlock> ALCHEMICAL_CAULDRON = register("alchemical_cauldron", () -> new AlchemicalCauldronBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F).noOcclusion()));
 
 

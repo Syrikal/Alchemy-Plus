@@ -41,14 +41,14 @@ import syric.alchemyplus.alchemy.SubstanceList;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class AlchemicalCauldronBlockOld extends Block {
+public class OldAlchemicalCauldronBlock extends Block {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 3);
     private static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape SHAPE = VoxelShapes.join(VoxelShapes.block(), VoxelShapes.or(box(0.0D, 0.0D, 4.0D, 16.0D, 3.0D, 12.0D), box(4.0D, 0.0D, 0.0D, 12.0D, 3.0D, 16.0D), box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D), INSIDE), IBooleanFunction.ONLY_FIRST);
     public boolean slimed;
 
 
-    public AlchemicalCauldronBlockOld(AbstractBlock.Properties properties) {
+    public OldAlchemicalCauldronBlock(AbstractBlock.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, Integer.valueOf(0)));
         this.slimed = false;
